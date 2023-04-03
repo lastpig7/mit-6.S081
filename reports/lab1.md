@@ -1,13 +1,13 @@
-#lab：Xv6 and Unix utilities
+# lab：Xv6 and Unix utilities
 
-##1、概述
+## 1、概述
 从[官方文档][1]中，要理解一下xv6的文件系统，基础的系统调用等。
 ##2、代码
-###2.1 Boot xv6
+### 2.1 Boot xv6
 
 这个实验非常简单，配置完虚拟环境后，编译虚拟机，运行xv6虚拟机即可。
 
-###2.2 sleep 
+### 2.2 sleep 
 直接调用sleep()的系统调用
 
 ```c
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     }
 }
 ```
-###2.3 pingpong 
+### 2.3 pingpong 
 这边要理解一下linux 下pipe()函数的使用，管道是半双工通信的，要记得时使用关闭一端。不然pipe会堵塞。
 ```c
 int main(int argc, char *argv[])
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     exit(0);
 }
 ```
-###2.4 primes
+### 2.4 primes
 这道题还是有点难度的，注意的点有两点：
 （1） 注意父进程要在子进程之后关闭，不然会出现父进程结束了，子进程没有结束，导致一些bug
 （2） 注意内存的开销，管道在使用完毕后一定要关闭。不然程序会内存不足。
@@ -167,7 +167,7 @@ int main() {
     return 0;
 }
 ```
-###2.5 find
+### 2.5 find
 写这道题前要先看一下ls.c文件，理解stat和dirent两个结构体。
 state：
 ```c
@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-###2.6 xargs
+### 2.6 xargs
 这道题要首先理解xv6系统中的管道和文件描述符的特殊用法。
 linux管道，例如如下指令
 ```
