@@ -1,8 +1,8 @@
 # lab：Xv6 and Unix utilities
 
 ## 1、概述
-从[官方文档][1]中，要理解一下xv6的文件系统，基础的系统调用等。
-##2、代码
+从[XV6_Book][1]中，要理解一下xv6的文件系统，基础的系统调用等。
+## 2、代码
 ### 2.1 Boot xv6
 
 这个实验非常简单，配置完虚拟环境后，编译虚拟机，运行xv6虚拟机即可。
@@ -183,7 +183,7 @@ struct stat {
   uint64 size; // Size of file in bytes
 };
 ```
-在[官方文档][1]的91页的8.11中定义了dirent的数据结构。"*Each entry is a struct dirent (kernel/fs.h:56), which contains a name and an inode number. The name is at most DIRSIZ (14) characters;*"。dirent包含了目录的名字和目录的索引节点（inode）。
+在[XV6_Book][1]的91页的8.11中定义了dirent的数据结构。"*Each entry is a struct dirent (kernel/fs.h:56), which contains a name and an inode number. The name is at most DIRSIZ (14) characters;*"。dirent包含了目录的名字和目录的索引节点（inode）。
 dirent:
 ```c
 #define DIRSIZ 14
@@ -283,7 +283,7 @@ COMA | COMB | COMC
 COMA的正确输出作为COMB的正常输入，随后COMB的正常输出作为COMC的正常输入，以此类推。
 xargs 的指令的作用是将管道传递过来的输入进行处理然后传递到命令的参数位置上。
 那么我们如何获得之前执行过的指令的正常输出呢？
-在[官方文档][1]的31页写到："*By convention, a process reads from file descriptor 0 (standard input),writes output to file descriptor 1 (standard output), andwrites error messages to file descriptor 2(standard error).*"
+在[XV6_Book][1]的31页写到："*By convention, a process reads from file descriptor 0 (standard input),writes output to file descriptor 1 (standard output), andwrites error messages to file descriptor 2(standard error).*"
 所以我们只要从文件描述符为0的地方读取输入信息就可以了。
 ```c
 read(0,buf,MSGSIZE);
