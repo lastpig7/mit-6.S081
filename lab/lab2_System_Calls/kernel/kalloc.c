@@ -81,7 +81,7 @@ kalloc(void)
   return (void*)r;
 }
 
-//Collect the amount of free memory.
+//fetch the amount of free memory.
 //Get the memory size in bytes.
 void freememory(uint64 *bytes)
 {

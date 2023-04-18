@@ -694,6 +694,7 @@ procdump(void)
   }
 }
 
+// fetch the number of unused proc 
 void            
 procnum(uint64* dst)
 {
