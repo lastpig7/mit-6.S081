@@ -440,3 +440,39 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
     return -1;
   }
 }
+
+void vmprint(pagetable_t pagetable,int level){
+  if(level < 0)
+    panic("vmprint level");
+  if(level == 2)
+    printf("page table %p\n",pagetable);
+  // there are 2^9 = 512 PTES in a page table.
+  for(int i = 0; i < 512; i++){
+    pte_t pte = pagetable[i];
+    if(pte & PTE_V){
+      uint64 child = PTE2PA(pte);
+      // printf tree struct of pte and pa.
+      switch (level)
+      {
+      case 2:
+        printf("..%d: pte %p pa %p\n",i,pte,child);
+        break;
+
+      case 1:
+        printf(".. ..%d: pte %p pa %p\n",i,pte,child);
+        break;
+
+      case 0:
+        printf(".. .. ..%d: pte %p pa %p\n",i,pte,child);
+        break;
+      
+      default:
+        break;
+      }
+      // the pte points to a low level.
+      if((pte & (PTE_R|PTE_W|PTE_X))==0)
+      // do function recursion.
+        vmprint((pagetable_t)child,level-1);
+    } 
+    }
+}    
