@@ -28,7 +28,7 @@ kvminit()
   kvmmap(UART0, UART0, PGSIZE, PTE_R | PTE_W);
 
   // virtio mmio disk interface
-  kvmmap(VIRTIO0, VIRTIO0, PGSIZE, PTE_R | PTE_W);
+  kvmmap(VIRTIO0, VIRTIO0, PGSIZE, PTE_R | PTE_W  );
 
   // CLINT
   kvmmap(CLINT, CLINT, 0x10000, PTE_R | PTE_W);
@@ -109,6 +109,44 @@ walkaddr(pagetable_t pagetable, uint64 va)
     return 0;
   pa = PTE2PA(*pte);
   return pa;
+}
+
+pagetable_t
+Ukvminit()
+{
+  pagetable_t Ukpgtbl = (pagetable_t) kalloc();
+  memset(Ukpgtbl, 0, PGSIZE);
+
+  // uart registers
+  uvmmap(Ukpgtbl,UART0, UART0, PGSIZE, PTE_R | PTE_W);
+
+  // virtio mmio disk interface
+  uvmmap(Ukpgtbl,VIRTIO0, VIRTIO0, PGSIZE, PTE_R | PTE_W);
+
+  // CLINT
+  uvmmap(Ukpgtbl,CLINT, CLINT, 0x10000, PTE_R | PTE_W);
+
+  // PLIC
+  uvmmap(Ukpgtbl,PLIC, PLIC, 0x400000, PTE_R | PTE_W);
+
+  // map kernel text executable and read-only.
+  uvmmap(Ukpgtbl,KERNBASE, KERNBASE, (uint64)etext-KERNBASE, PTE_R | PTE_X);
+
+  // map kernel data and the physical RAM we'll make use of.
+  uvmmap(Ukpgtbl,(uint64)etext, (uint64)etext, PHYSTOP-(uint64)etext, PTE_R | PTE_W);
+
+  // map the trampoline for trap entry/exit to
+  // the highest virtual address in the kernel.
+  uvmmap(Ukpgtbl,TRAMPOLINE, (uint64)trampoline, PGSIZE, PTE_R | PTE_X);
+  return Ukpgtbl;
+}
+
+// add a mapping to the kernel page table 
+void
+uvmmap(pagetable_t pt,uint64 va, uint64 pa, uint64 sz, int perm)
+{
+  if(mappages(pt, va, sz, pa, perm) != 0)
+  panic("uvmmap");
 }
 
 // add a mapping to the kernel page table.
